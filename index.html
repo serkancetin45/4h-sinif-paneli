@@ -605,6 +605,14 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+      align-items: center;
+    }
+
+    #firebaseStatus {
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 10px;
     }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -817,7 +825,9 @@
 
     <footer>
       <span><strong>4H Sınıf Dünyası</strong> • Çalışkanlık bizim ruhumuza işlemiş.</span>
-      <div class="footer-right"></div>
+      <div class="footer-right">
+        <span id="firebaseStatus">Firebase: başlatılıyor...</span>
+      </div>
     </footer>
   </div>
 
@@ -891,6 +901,7 @@
     const todayStarList = document.getElementById("todayStarList");
     const absentList = document.getElementById("absentList");
     const attendanceDateInfo = document.getElementById("attendanceDateInfo");
+    const firebaseStatus = document.getElementById("firebaseStatus");
 
     let teacherMode = false;
     let songPlaying = false;
@@ -900,7 +911,7 @@
     let randomPool = [];
     let randomPoolInitialized = false;
 
-    // TARİH (Hem header, hem yoklama kartı)
+    // TARİH
     (function showDate() {
       const now = new Date();
       const formatter = new Intl.DateTimeFormat("tr-TR", {
@@ -1020,7 +1031,6 @@
 
       const maxItems = 5;
 
-      // Günün yıldızı listesi: günlük neti > 0 olanları en üstten al
       let starAny = false;
       dailyScores.slice(0, maxItems).forEach((item, index) => {
         if (item.value <= 0) return;
@@ -1035,7 +1045,6 @@
         todayStarList.appendChild(li);
       }
 
-      // Günlük en yüksek puanlar (detaylı)
       let dailyAny = false;
       dailyScores.slice(0, maxItems).forEach((item) => {
         if (item.value === 0) return;
@@ -1050,7 +1059,6 @@
         dailyTopList.appendChild(li);
       }
 
-      // Günlük en çok eksi alanlar
       let negAny = false;
       negativeScores.slice(0, maxItems).forEach((item) => {
         if (item.minus === 0) return;
@@ -1065,7 +1073,6 @@
         negativeTopList.appendChild(li);
       }
 
-      // Haftalık en yüksek puanlar
       let weeklyAny = false;
       weeklyScores.slice(0, maxItems).forEach((item) => {
         if (item.value === 0) return;
@@ -1175,7 +1182,6 @@
         card.appendChild(main);
         card.appendChild(pointsRow);
 
-        // Yoklama modu: karta tıklayınca yok/var değiştir
         card.addEventListener("click", (e) => {
           if (!attendanceMode) return;
           if (e.target.closest(".btn-point")) return;
@@ -1255,7 +1261,6 @@
       if (btnAttendanceMode) btnAttendanceMode.disabled = !teacherMode;
       if (btnMakeGroups) btnMakeGroups.disabled = !teacherMode;
 
-      // Öğretmen modu butonu görünümü
       if (btnTeacherToggle) {
         if (teacherMode) {
           btnTeacherToggle.classList.add("btn--accent");
@@ -1289,16 +1294,24 @@
     // FIREBASE
     function initFirebase() {
       if (!window.firebase) {
-        console.warn(
-          "Firebase bulunamadı. Puanlar bu oturumda geçici olarak tutulacak."
-        );
+        console.warn("Firebase bulunamadı.");
+        if (firebaseStatus) {
+          firebaseStatus.textContent = "Firebase: bulunamadı (sdk yüklenmedi)";
+          firebaseStatus.style.borderColor = "#f97373";
+          firebaseStatus.style.color = "#fecaca";
+        }
         resetRandomPool();
         randomPoolInitialized = true;
         renderStudents();
         return;
       }
 
-      // 🔑 SENİN PROJEYE GÖRE TAM DOLDURULMUŞ CONFIG
+      if (firebaseStatus) {
+        firebaseStatus.textContent = "Firebase: bağlanıyor...";
+        firebaseStatus.style.borderColor = "rgba(148,163,184,0.6)";
+        firebaseStatus.style.color = "#e5e7eb";
+      }
+
       const firebaseConfig = {
         apiKey: "AIzaSyDlrVdLo7ZMqhLJb-xoImcFKuLC65v_20Y",
         authDomain: "dort-islem-oyunu-608cb.firebaseapp.com",
@@ -1311,10 +1324,20 @@
       };
 
       try {
-        const app = firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
         db = firebase.database();
+        if (firebaseStatus) {
+          firebaseStatus.textContent = "Firebase: bağlandı, veri bekleniyor...";
+          firebaseStatus.style.borderColor = "rgba(74,222,128,0.8)";
+          firebaseStatus.style.color = "#bbf7d0";
+        }
       } catch (e) {
         console.warn("Firebase başlatılamadı:", e);
+        if (firebaseStatus) {
+          firebaseStatus.textContent = "Firebase HATA: " + (e.message || e.code || "başlatılamadı");
+          firebaseStatus.style.borderColor = "#f97373";
+          firebaseStatus.style.color = "#fecaca";
+        }
         resetRandomPool();
         randomPoolInitialized = true;
         renderStudents();
@@ -1322,42 +1345,101 @@
       }
 
       const studentsRef = db.ref("classes/4h/students");
-      studentsRef.on("value", (snapshot) => {
-        if (snapshot.exists()) {
-          const obj = snapshot.val();
-          students = Object.values(obj)
-            .map(normalizeStudent)
-            .sort((a, b) => (a.no || 0) - (b.no || 0));
-        } else {
-          saveStudents();
-        }
-        if (!randomPoolInitialized) {
+      studentsRef.on(
+        "value",
+        (snapshot) => {
+          if (snapshot.exists()) {
+            const obj = snapshot.val();
+            students = Object.values(obj)
+              .map(normalizeStudent)
+              .sort((a, b) => (a.no || 0) - (b.no || 0));
+            if (firebaseStatus) {
+              firebaseStatus.textContent = "Firebase: veri yüklendi ✓";
+              firebaseStatus.style.borderColor = "rgba(74,222,128,0.8)";
+              firebaseStatus.style.color = "#bbf7d0";
+            }
+          } else {
+            saveStudents(true);
+          }
+          if (!randomPoolInitialized) {
+            resetRandomPool();
+            randomPoolInitialized = true;
+          }
+          renderStudents();
+        },
+        (error) => {
+          console.error("studentsRef error:", error);
+          if (firebaseStatus) {
+            firebaseStatus.textContent = "Firebase okuma hatası: " + (error.code || "");
+            firebaseStatus.style.borderColor = "#f97373";
+            firebaseStatus.style.color = "#fecaca";
+          }
+          alert("Firebase okuma hatası: " + error.message);
           resetRandomPool();
           randomPoolInitialized = true;
+          renderStudents();
         }
-        renderStudents();
-      });
+      );
 
       const noteRef = db.ref("classes/4h/note");
-      noteRef.on("value", (snapshot) => {
-        if (snapshot.exists() && noteBox) {
-          noteBox.value = snapshot.val();
+      noteRef.on(
+        "value",
+        (snapshot) => {
+          if (snapshot.exists() && noteBox) {
+            noteBox.value = snapshot.val();
+          }
+        },
+        (error) => {
+          console.error("noteRef error:", error);
         }
-      });
+      );
     }
 
-    function saveStudents() {
-      if (!db) return;
+    function saveStudents(isInitial = false) {
+      if (!db) {
+        console.warn("saveStudents: db yok");
+        if (firebaseStatus) {
+          firebaseStatus.textContent = "Firebase: db yok (init başarısız)";
+          firebaseStatus.style.borderColor = "#f97373";
+          firebaseStatus.style.color = "#fecaca";
+        }
+        return;
+      }
       const obj = {};
       students.forEach((s) => {
         obj[s.id] = normalizeStudent({ ...s });
       });
-      db.ref("classes/4h/students").set(obj);
+      db.ref("classes/4h/students")
+        .set(obj)
+        .then(() => {
+          if (firebaseStatus) {
+            firebaseStatus.textContent =
+              "Firebase: kayıt başarılı (" +
+              (isInitial ? "ilk yükleme" : "güncellendi") +
+              ")";
+            firebaseStatus.style.borderColor = "rgba(74,222,128,0.8)";
+            firebaseStatus.style.color = "#bbf7d0";
+          }
+        })
+        .catch((error) => {
+          console.error("saveStudents error:", error);
+          if (firebaseStatus) {
+            firebaseStatus.textContent = "Firebase yazma hatası: " + (error.code || "");
+            firebaseStatus.style.borderColor = "#f97373";
+            firebaseStatus.style.color = "#fecaca";
+          }
+          alert("Firebase yazma hatası: " + error.message);
+        });
     }
 
     function saveNote() {
       if (!db || !noteBox) return;
-      db.ref("classes/4h/note").set(noteBox.value || "");
+      db.ref("classes/4h/note")
+        .set(noteBox.value || "")
+        .catch((error) => {
+          console.error("saveNote error:", error);
+          alert("Not kaydedilirken Firebase hatası: " + error.message);
+        });
     }
 
     function attachUIListeners() {
