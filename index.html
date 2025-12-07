@@ -911,7 +911,6 @@
     let randomPool = [];
     let randomPoolInitialized = false;
 
-    // TARİH
     (function showDate() {
       const now = new Date();
       const formatter = new Intl.DateTimeFormat("tr-TR", {
@@ -1291,7 +1290,6 @@
       };
     }
 
-    // FIREBASE
     function initFirebase() {
       if (!window.firebase) {
         console.warn("Firebase bulunamadı.");
@@ -1315,6 +1313,8 @@
       const firebaseConfig = {
         apiKey: "AIzaSyDlrVdLo7ZMqhLJb-xoImcFKuLC65v_20Y",
         authDomain: "dort-islem-oyunu-608cb.firebaseapp.com",
+        // 🔴 ÖNEMLİ: Burayı Firebase Realtime Database ekranında gördüğün URL ile birebir değiştir:
+        // Örn: "https://dort-islem-oyunu-608cb-default-rtdb.europe-west1.firebasedatabase.app"
         databaseURL: "https://dort-islem-oyunu-608cb-default-rtdb.firebaseio.com",
         projectId: "dort-islem-oyunu-608cb",
         storageBucket: "dort-islem-oyunu-608cb.appspot.com",
@@ -1584,8 +1584,8 @@
       if (btnTeacherToggle) {
         btnTeacherToggle.addEventListener("click", () => {
           const pin = prompt("Öğretmen şifresi:");
-          if (pin === "9806221") {
-            teacherMode = !teacherMode;
+          if (pin === "1071") {
+            teacherMode = !teacherMode; // aynı butonla aç/kapa
             updateTeacherModeUI();
           } else if (pin !== null) {
             alert("Yanlış şifre.");
