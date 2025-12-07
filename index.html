@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>4H Sınıf Dünyası</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --card: #020617;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --accent-strong: #0ea5e9;
+      --text: #e5e7eb;
+      --text-soft: #9ca3af;
+      --danger: #f97373;
+      --success: #4ade80;
+      --radius-xl: 18px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.75);
+      --border-subtle: 1px solid rgba(148, 163, 184, 0.18);
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1200px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.96));
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      backdrop-filter: blur(18px);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: radial-gradient(circle at top left, #1f2937, #020617);
+      border-radius: 18px;
+      border: var(--border-subtle);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.08), transparent 60%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #38bdf8, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9fafb;
+      font-weight: 800;
+      font-size: 20px;
+      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.65);
+    }
+
+    .header-text h1 {
+      font-size: 20px;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.14);
+      color: #99f6e4;
+      border: 1px solid rgba(45, 212, 191, 0.6);
+    }
+
+    .header-text p {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-top: 3px;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      font-size: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .teacher-tag {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .teacher-tag span { opacity: 0.8; }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 2.3fr) minmax(260px, 1.2fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .column { display: flex; flex-direction: column; gap: 12px; }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(30, 64, 175, 0.4), rgba(15, 23, 42, 0.96));
+      border-radius: var(--radius-xl);
+      padding: 14px 16px;
+      border: var(--border-subtle);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08), transparent 60%);
+      pointer-events: none;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #cbd5f5;
+    }
+
+    .card-subtitle {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-top: 1px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--text-soft);
+    }
+
+    .chip--green {
+      background: rgba(22, 163, 74, 0.16);
+      border-color: rgba(74, 222, 128, 0.9);
+      color: #bbf7d0;
+      box-shadow: 0 0 10px rgba(74, 222, 128, 0.9);
+    }
+
+    .chip--red {
+      background: rgba(127, 29, 29, 0.35);
+      border-color: rgba(248, 113, 113, 1);
+      color: #fecaca;
+      box-shadow: 0 0 12px rgba(248, 113, 113, 1);
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      flex: 1;
+      min-width: 110px;
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: 12px;
+      padding: 8px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .stat-value span {
+      font-size: 11px;
+      color: #4ade80;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    button { border: none; cursor: pointer; font-family: inherit; }
+
+    .btn {
+      font-size: 12px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        background var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.8);
+      border-color: rgba(56, 189, 248, 0.8);
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .btn--accent {
+      background: linear-gradient(135deg, #38bdf8, #4f46e5);
+      border-color: transparent;
+      color: #f9fafb;
+      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.6);
+    }
+
+    .btn--accent:hover:not(:disabled) {
+      background: linear-gradient(135deg, #0ea5e9, #4338ca);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-icon { font-size: 14px; opacity: 0.9; }
+
+    .teacher-mode-indicator { display: none; }
+
+    .students-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .student-card {
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 14px;
+      padding: 9px 10px;
+      border: 1px solid rgba(55, 65, 81, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        border-color var(--transition-fast), background var(--transition-fast);
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .student-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.13), transparent 56%);
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+    }
+
+    .student-card.absent {
+      opacity: 0.6;
+      border-color: rgba(248, 113, 113, 0.9);
+      background: rgba(30, 30, 30, 0.9);
+    }
+
+    .student-card.absent .dot {
+      background: #ef4444;
+      box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.25);
+    }
+
+    .student-main {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #4f46e5, #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9fafb;
+      font-weight: 700;
+      font-size: 15px;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.9);
+      flex-shrink: 0;
+    }
+
+    .student-info { flex: 1; }
+
+    .student-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .student-meta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.22);
+    }
+
+    .points-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 3px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .points-value {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+    }
+
+    .points-value span {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .point-buttons { display: inline-flex; gap: 4px; }
+
+    .btn-point {
+      width: 26px;
+      height: 24px;
+      border-radius: 999px;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(148, 163, 184, 0.65);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .btn-point:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: var(--accent-strong);
+      background: rgba(15, 23, 42, 1);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+    }
+
+    .btn-point--plus {
+      color: #bbf7d0;
+      border-color: rgba(34, 197, 94, 0.7);
+      background: rgba(22, 163, 74, 0.18);
+    }
+
+    .btn-point--minus {
+      color: #fecaca;
+      border-color: rgba(248, 113, 113, 0.7);
+      background: rgba(127, 29, 29, 0.28);
+    }
+
+    .btn-point:disabled {
+      opacity: 0.35;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* Rastgele öğrenci seçilince neon + büyüme efekti */
+    @keyframes pulseGlow {
+      0% {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 0 18px rgba(56, 189, 248, 0.9);
+      }
+      100% {
+        transform: translateY(-4px) scale(1.06);
+        box-shadow: 0 0 26px rgba(56, 189, 248, 1);
+      }
+    }
+
+    .student-card.highlight {
+      border-color: rgba(56, 189, 248, 1);
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.28), rgba(15, 23, 42, 0.96));
+      animation: pulseGlow 0.85s ease-in-out infinite alternate;
+    }
+
+    .student-card.highlight::before { opacity: 1; }
+
+    .badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(30, 64, 175, 0.28);
+      border: 1px solid rgba(129, 140, 248, 0.8);
+      color: #e0e7ff;
+    }
+
+    .star-student {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(251, 191, 36, 0.6);
+    }
+
+    .star-icon { font-size: 22px; }
+
+    .star-info-main {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .star-info-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .groups-list {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 170px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .group-item {
+      font-size: 12px;
+      padding: 5px 7px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .group-label {
+      font-weight: 600;
+      color: #e5e7eb;
+      margin-right: 8px;
+    }
+
+    .rank-list {
+      margin-top: 4px;
+      margin-left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-left: 2px;
+    }
+
+    .rank-list li {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    /* Günün Yıldızı rozeti */
+    .today-star-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .star-pill {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(251, 191, 36, 0.16);
+      border: 1px solid rgba(250, 204, 21, 0.7);
+      color: #facc15;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .note-area {
+      margin-top: 8px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      padding: 8px;
+    }
+
+    .note-area textarea {
+      width: 100%;
+      border: none;
+      outline: none;
+      resize: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 12px;
+      font-family: inherit;
+    }
+
+    footer {
+      margin-top: 4px;
+      padding: 0 4px;
+      font-size: 11px;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    footer span strong { color: #e5e7eb; }
+
+    .footer-right {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.6);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-track { background: transparent; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="header-left">
+        <div class="logo-circle">4H</div>
+        <div class="header-text">
+          <h1>4H Sınıf Dünyası <span class="pill">Canlı Sınıf Paneli</span></h1>
+          <p>Ders içi puanlar, gruplar ve sınıf notları – hepsi tek ekranda.</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="teacher-tag">
+          <span>👨‍🏫</span><span>Serkan Öğretmen • 4H</span>
+        </div>
+        <div id="dateText"></div>
+      </div>
+    </header>
+
+    <main>
+      <!-- SOL KOLON -->
+      <section class="column">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Sınıf Özeti</div>
+              <div class="card-subtitle">Bugünün genel performans görünümü</div>
+            </div>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-pill">
+              <div class="stat-label">Toplam Öğrenci</div>
+              <div class="stat-value"><span id="statStudentCount">0</span></div>
+            </div>
+            <div class="stat-pill">
+              <div class="stat-label">Toplam Puan</div>
+              <div class="stat-value">
+                <span id="statTotalPoints">0</span>
+                <span>puan</span>
+              </div>
+            </div>
+            <div class="stat-pill">
+              <div class="stat-label">Ortalama Puan</div>
+              <div class="stat-value">
+                <span id="statAvgPoints">0</span>
+                <span>/ öğrenci</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="toolbar" style="margin-top:10px;">
+            <button class="btn btn--accent" id="btnRandomStudent">
+              <span class="btn-icon">✨</span>
+              Rastgele Öğrenci Seç
+            </button>
+            <button class="btn" id="btnAttendanceMode">
+              <span class="btn-icon">✅</span>
+              Yoklama Modu
+            </button>
+            <button class="btn" id="btnMakeGroups">
+              <span class="btn-icon">🎲</span>
+              Gruplara Ayır
+            </button>
+            <button class="btn" id="btnClearGroups">
+              <span class="btn-icon">🧽</span>
+              Grupları Sil
+            </button>
+            <button class="btn" id="btnResetDaily">
+              <span class="btn-icon">📅</span>
+              Günlük Sıfırla
+            </button>
+            <button class="btn" id="btnResetWeekly">
+              <span class="btn-icon">📆</span>
+              Haftalık Sıfırla
+            </button>
+            <button class="btn" id="btnSongToggle">
+              <span class="btn-icon">🎵</span>
+              Sınıf Şarkısını Çal
+            </button>
+            <button class="btn" id="btnResetPoints">
+              <span class="btn-icon">🧹</span>
+              Puanları Sıfırla
+            </button>
+          </div>
+
+          <div id="teacherModeIndicator" class="teacher-mode-indicator">
+            <!-- gizli -->
+          </div>
+
+          <div class="chip-row">
+            <span class="chip chip--green">Dikkatli Dinleme +1</span>
+            <span class="chip chip--green">Arkadaşına Yardım +1</span>
+            <span class="chip chip--red">Kurallara Uymama! -1</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Öğrenci Listesi</div>
+              <div class="card-subtitle">Puanları tek tıkla güncelle (Sadece Öğretmen)</div>
+            </div>
+          </div>
+          <div id="studentsGrid" class="students-grid"></div>
+        </div>
+      </section>
+
+      <!-- SAĞ KOLON -->
+      <section class="column">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Haftanın Yıldızı</div>
+              <div class="card-subtitle">En yüksek puanlı öğrenciniz</div>
+            </div>
+            <span class="badge">Otomatik hesaplanır</span>
+          </div>
+          <div id="starStudentBox" class="star-student">
+            <div class="star-icon">⭐</div>
+            <div>
+              <div class="star-info-main">Henüz seçilmedi</div>
+              <div class="star-info-sub">Puanlar geldikçe burada görünecek.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Bugünün Grupları</div>
+              <div class="card-subtitle">Rasgele ve adil dağılım</div>
+            </div>
+          </div>
+          <div id="groupsList" class="groups-list">
+            <div style="font-size:12px; color:var(--text-soft);">
+              "Gruplara Ayır" butonuna tıklayınca 4H sınıfınız otomatik gruplara ayrılır.
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Yoklama</div>
+              <div class="card-subtitle">Bugün gelmeyen öğrenciler</div>
+            </div>
+            <span class="badge">Yoklama Modu ile seç</span>
+          </div>
+          <div id="attendanceDateInfo" style="font-size:11px;color:var(--text-soft);margin:4px 0 2px 16px;"></div>
+          <ol id="absentList" class="rank-list"></ol>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Puan Listeleri</div>
+              <div class="card-subtitle">Günlük ve haftalık görünüm</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
+            <div>
+              <div class="today-star-header">
+                <strong>Günün Yıldızı Listesi</strong>
+                <span class="star-pill">⭐ Günün Yıldızı</span>
+              </div>
+              <ol id="todayStarList" class="rank-list"></ol>
+            </div>
+            <div>
+              <strong>Günlük En Yüksek Puanlar</strong>
+              <ol id="dailyTopList" class="rank-list"></ol>
+            </div>
+            <div>
+              <strong>Günlük En Çok Eksi Alanlar</strong>
+              <ol id="negativeTopList" class="rank-list"></ol>
+            </div>
+            <div>
+              <strong>Haftalık En Yüksek Puanlar</strong>
+              <ol id="weeklyTopList" class="rank-list"></ol>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Sınıf Not Panosu</div>
+              <div class="card-subtitle">Ders özeti, ödev hatırlatma, küçük notlar</div>
+            </div>
+          </div>
+          <div class="note-area">
+            <textarea
+              id="noteBox"
+              rows="4"
+              placeholder="Bugünün konusu, yapılacak ödevler, küçük notlar..."
+            ></textarea>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span><strong>4H Sınıf Dünyası</strong> • Çalışkanlık bizim ruhumuza işlemiş.</span>
+      <div class="footer-right"></div>
+    </footer>
+  </div>
+
+  <!-- 🎵 Sınıf şarkısı (opsiyonel) -->
+  <audio id="classSong" src="4h-sinif-sarkisi.mp3"></audio>
+
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    // ==== SINIF LİSTESİ ====
+    const studentsTemplate = [
+      { id: 59,   no: 59,   name: "DERİNSU EKİN",               points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 107,  no: 107,  name: "BERRA BAYRAKTAR",            points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 185,  no: 185,  name: "ELİF NUR GÜLER",             points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 192,  no: 192,  name: "MEHMET CAN KIRGIL",          points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 235,  no: 235,  name: "TÜRKAN ZELAL OLCAY",         points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 381,  no: 381,  name: "İBRAHİM UYSAL",              points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 416,  no: 416,  name: "ELİF MİRA ÇİĞDEM",           points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 561,  no: 561,  name: "İREM NUR ÜÇKARDEŞLER",       points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 564,  no: 564,  name: "NİSA NUR ÖZTAŞ",             points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 572,  no: 572,  name: "YAĞMUR COŞKUN",              points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 573,  no: 573,  name: "BEREN İNCE",                 points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 574,  no: 574,  name: "BESTE DEMİRCAN",             points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 575,  no: 575,  name: "ECRİN ÖZKUL",                points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 579,  no: 579,  name: "MUHAMMED SELİM AKGÜN",      points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 580,  no: 580,  name: "ÜMİT GÜLERAY",               points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 589,  no: 589,  name: "AYAZ GÜLEÇ",                 points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 591,  no: 591,  name: "BARIŞ SUNGUR",               points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 592,  no: 592,  name: "ELİF ÖZTEP",                 points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 593,  no: 593,  name: "MERYEM ÖZTEP",               points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 595,  no: 595,  name: "YUSUF ERAY ÖKTEM",           points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 597,  no: 597,  name: "HELİN ÖKTEM",                points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 598,  no: 598,  name: "MUHAMMED ALİ AYDIN",         points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 720,  no: 720,  name: "NEHİR BORAN",                points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 777,  no: 777,  name: "MURAT DEMİREL",              points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 852,  no: 852,  name: "YUSUF YILDIRIM",             points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 870,  no: 870,  name: "HÜSEYİN FURKAN YAVAŞ",       points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 882,  no: 882,  name: "SALİH MUSTAFA BUDAK",        points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 2213, no: 2213, name: "MUSTAFA EYMEN DURAK",        points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 5011, no: 5011, name: "ABDULRAHİM RAMADAN",         points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 5305, no: 5305, name: "HAMZE ELHACALİ",             points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 5352, no: 5352, name: "SİBEL ALHASAN",              points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+      { id: 5373, no: 5373, name: "MUHAMMED ELMUSTAFA",         points: 0, dailyPlus: 0, dailyMinus: 0, weeklyPlus: 0, weeklyMinus: 0, absentToday: false },
+    ];
+
+    let students = JSON.parse(JSON.stringify(studentsTemplate));
+
+    const studentsGrid = document.getElementById("studentsGrid");
+    const statStudentCount = document.getElementById("statStudentCount");
+    const statTotalPoints = document.getElementById("statTotalPoints");
+    const statAvgPoints = document.getElementById("statAvgPoints");
+    const starStudentBox = document.getElementById("starStudentBox");
+    const groupsList = document.getElementById("groupsList");
+    const btnRandomStudent = document.getElementById("btnRandomStudent");
+    const btnMakeGroups = document.getElementById("btnMakeGroups");
+    const btnClearGroups = document.getElementById("btnClearGroups");
+    const btnResetPoints = document.getElementById("btnResetPoints");
+    const btnResetDaily = document.getElementById("btnResetDaily");
+    const btnResetWeekly = document.getElementById("btnResetWeekly");
+    const btnSongToggle = document.getElementById("btnSongToggle");
+    const btnAttendanceMode = document.getElementById("btnAttendanceMode");
+    const classSong = document.getElementById("classSong");
+    const noteBox = document.getElementById("noteBox");
+    const dateText = document.getElementById("dateText");
+    const dailyTopList = document.getElementById("dailyTopList");
+    const negativeTopList = document.getElementById("negativeTopList");
+    const weeklyTopList = document.getElementById("weeklyTopList");
+    const todayStarList = document.getElementById("todayStarList");
+    const absentList = document.getElementById("absentList");
+    const attendanceDateInfo = document.getElementById("attendanceDateInfo");
+
+    let teacherMode = false;
+    let songPlaying = false;
+    let attendanceMode = false;
+    let db = null;
+
+    let randomPool = [];
+    let randomPoolInitialized = false;
+
+    // TARİH (Hem header, hem yoklama kartı)
+    (function showDate() {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat("tr-TR", {
+        weekday: "short",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+      const text = formatter.format(now);
+      if (dateText) dateText.textContent = text;
+      if (attendanceDateInfo) attendanceDateInfo.textContent = "Bugün: " + text;
+    })();
+
+    function getInitials(name) {
+      const parts = name.trim().split(" ");
+      if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+      return (
+        (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase()
+      );
+    }
+
+    function normalizeStudent(s) {
+      s.points = s.points || 0;
+      s.dailyPlus = s.dailyPlus || 0;
+      s.dailyMinus = s.dailyMinus || 0;
+      s.weeklyPlus = s.weeklyPlus || 0;
+      s.weeklyMinus = s.weeklyMinus || 0;
+      s.absentToday = !!s.absentToday;
+      return s;
+    }
+
+    function updateStats() {
+      statStudentCount.textContent = students.length.toString();
+      const total = students.reduce((sum, s) => sum + (s.points || 0), 0);
+      statTotalPoints.textContent = total.toString();
+
+      const avg = students.length > 0 ? total / students.length : 0;
+      statAvgPoints.textContent = avg.toFixed(1);
+
+      updateStarStudent();
+      updateLists();
+      updateAbsentList();
+      updateTeacherModeUI();
+    }
+
+    function updateStarStudent() {
+      if (!students.length) return;
+
+      let maxPoints = students[0].points || 0;
+      let best = [students[0]];
+
+      for (let i = 1; i < students.length; i++) {
+        const p = students[i].points || 0;
+        if (p > maxPoints) {
+          maxPoints = p;
+          best = [students[i]];
+        } else if (p === maxPoints) {
+          best.push(students[i]);
+        }
+      }
+
+      const main = starStudentBox.querySelector(".star-info-main");
+      const sub = starStudentBox.querySelector(".star-info-sub");
+
+      if (maxPoints === 0) {
+        main.textContent = "Henüz yıldız yok";
+        sub.textContent = "Olumlu puanlar geldikçe haftanın yıldızı burada görünecek.";
+        return;
+      }
+
+      const names = best.map((s) => s.name).join(", ");
+      main.textContent = names;
+      sub.textContent = `${maxPoints} puan ile haftanın yıldızı!`;
+    }
+
+    function updateLists() {
+      if (!dailyTopList || !negativeTopList || !weeklyTopList || !todayStarList) return;
+
+      dailyTopList.innerHTML = "";
+      negativeTopList.innerHTML = "";
+      weeklyTopList.innerHTML = "";
+      todayStarList.innerHTML = "";
+
+      const dailyScores = students.map((s) => {
+        const plus = s.dailyPlus || 0;
+        const minus = s.dailyMinus || 0;
+        return {
+          name: s.name,
+          value: plus - minus,
+          plus,
+          minus,
+        };
+      });
+
+      const negativeScores = students.map((s) => {
+        const minus = s.dailyMinus || 0;
+        return {
+          name: s.name,
+          minus,
+        };
+      });
+
+      const weeklyScores = students.map((s) => {
+        const plus = s.weeklyPlus || 0;
+        const minus = s.weeklyMinus || 0;
+        return {
+          name: s.name,
+          value: plus - minus,
+          plus,
+          minus,
+        };
+      });
+
+      dailyScores.sort((a, b) => b.value - a.value);
+      negativeScores.sort((a, b) => b.minus - a.minus);
+      weeklyScores.sort((a, b) => b.value - a.value);
+
+      const maxItems = 5;
+
+      // Günün yıldızı listesi: günlük neti > 0 olanları en üstten al
+      let starAny = false;
+      dailyScores.slice(0, maxItems).forEach((item, index) => {
+        if (item.value <= 0) return;
+        starAny = true;
+        const li = document.createElement("li");
+        li.textContent = `${index + 1}. ${item.name} – ${item.value} puan`;
+        todayStarList.appendChild(li);
+      });
+      if (!starAny) {
+        const li = document.createElement("li");
+        li.textContent = "Bugün henüz yıldız yok.";
+        todayStarList.appendChild(li);
+      }
+
+      // Günlük en yüksek puanlar (detaylı)
+      let dailyAny = false;
+      dailyScores.slice(0, maxItems).forEach((item) => {
+        if (item.value === 0) return;
+        dailyAny = true;
+        const li = document.createElement("li");
+        li.textContent = `${item.name} – ${item.value} puan (+${item.plus} / -${item.minus})`;
+        dailyTopList.appendChild(li);
+      });
+      if (!dailyAny) {
+        const li = document.createElement("li");
+        li.textContent = "Henüz günlük puan yok.";
+        dailyTopList.appendChild(li);
+      }
+
+      // Günlük en çok eksi alanlar
+      let negAny = false;
+      negativeScores.slice(0, maxItems).forEach((item) => {
+        if (item.minus === 0) return;
+        negAny = true;
+        const li = document.createElement("li");
+        li.textContent = `${item.name} – ${item.minus} eksi`;
+        negativeTopList.appendChild(li);
+      });
+      if (!negAny) {
+        const li = document.createElement("li");
+        li.textContent = "Henüz eksi puan yok.";
+        negativeTopList.appendChild(li);
+      }
+
+      // Haftalık en yüksek puanlar
+      let weeklyAny = false;
+      weeklyScores.slice(0, maxItems).forEach((item) => {
+        if (item.value === 0) return;
+        weeklyAny = true;
+        const li = document.createElement("li");
+        li.textContent = `${item.name} – ${item.value} puan (+${item.plus} / -${item.minus})`;
+        weeklyTopList.appendChild(li);
+      });
+      if (!weeklyAny) {
+        const li = document.createElement("li");
+        li.textContent = "Henüz haftalık puan yok.";
+        weeklyTopList.appendChild(li);
+      }
+    }
+
+    function updateAbsentList() {
+      if (!absentList) return;
+      absentList.innerHTML = "";
+      const absents = students.filter((s) => s.absentToday);
+      if (!absents.length) {
+        const li = document.createElement("li");
+        li.textContent = "Bugün tüm öğrenciler burada.";
+        absentList.appendChild(li);
+        return;
+      }
+      absents.forEach((s) => {
+        const li = document.createElement("li");
+        li.textContent = `${s.no} - ${s.name}`;
+        absentList.appendChild(li);
+      });
+    }
+
+    function renderStudents() {
+      studentsGrid.innerHTML = "";
+      students.forEach((student) => {
+        student = normalizeStudent(student);
+
+        const card = document.createElement("div");
+        card.className = "student-card";
+        card.dataset.id = student.id.toString();
+        if (student.absentToday) card.classList.add("absent");
+
+        const main = document.createElement("div");
+        main.className = "student-main";
+
+        const avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = getInitials(student.name);
+
+        const info = document.createElement("div");
+        info.className = "student-info";
+
+        const nameEl = document.createElement("div");
+        nameEl.className = "student-name";
+        nameEl.textContent = student.name;
+
+        const meta = document.createElement("div");
+        meta.className = "student-meta";
+        const dot = document.createElement("span");
+        dot.className = "dot";
+        const label = document.createElement("span");
+        label.textContent = `No: ${student.no}`;
+        meta.appendChild(dot);
+        meta.appendChild(label);
+
+        info.appendChild(nameEl);
+        info.appendChild(meta);
+
+        main.appendChild(avatar);
+        main.appendChild(info);
+
+        const pointsRow = document.createElement("div");
+        pointsRow.className = "points-row";
+
+        const pointsValue = document.createElement("div");
+        pointsValue.className = "points-value";
+        pointsValue.innerHTML = `<span>${student.points}</span><span>puan</span>`;
+        pointsValue.dataset.id = student.id.toString();
+
+        const pointButtons = document.createElement("div");
+        pointButtons.className = "point-buttons";
+
+        const btnPlus = document.createElement("button");
+        btnPlus.className = "btn-point btn-point--plus";
+        btnPlus.textContent = "+";
+        btnPlus.disabled = !teacherMode;
+        btnPlus.addEventListener("click", (e) => {
+          e.stopPropagation();
+          changePoints(student.id, 1);
+        });
+
+        const btnMinus = document.createElement("button");
+        btnMinus.className = "btn-point btn-point--minus";
+        btnMinus.textContent = "–";
+        btnMinus.disabled = !teacherMode;
+        btnMinus.addEventListener("click", (e) => {
+          e.stopPropagation();
+          changePoints(student.id, -1);
+        });
+
+        pointButtons.appendChild(btnPlus);
+        pointButtons.appendChild(btnMinus);
+
+        pointsRow.appendChild(pointsValue);
+        pointsRow.appendChild(pointButtons);
+
+        card.appendChild(main);
+        card.appendChild(pointsRow);
+
+        // Yoklama modu: karta tıklayınca yok/var değiştir
+        card.addEventListener("click", (e) => {
+          if (!attendanceMode) return;
+          if (e.target.closest(".btn-point")) return;
+          toggleAbsent(student.id);
+        });
+
+        studentsGrid.appendChild(card);
+      });
+
+      updateStats();
+    }
+
+    function changePoints(id, delta) {
+      if (!teacherMode) return;
+      const student = students.find((s) => s.id === id);
+      if (!student) return;
+
+      normalizeStudent(student);
+
+      student.points += delta;
+      if (delta > 0) {
+        student.dailyPlus += 1;
+        student.weeklyPlus += 1;
+      } else if (delta < 0) {
+        student.dailyMinus += 1;
+        student.weeklyMinus += 1;
+      }
+
+      const pointsValue = document.querySelector(
+        `.points-value[data-id="${id}"] span:first-child`
+      );
+      if (pointsValue) {
+        pointsValue.textContent = student.points.toString();
+      }
+      updateStats();
+      saveStudents();
+    }
+
+    function toggleAbsent(id) {
+      const student = students.find((s) => s.id === id);
+      if (!student) return;
+      student.absentToday = !student.absentToday;
+      const card = document.querySelector(`.student-card[data-id="${id}"]`);
+      if (card) {
+        card.classList.toggle("absent", student.absentToday);
+      }
+      updateAbsentList();
+      saveStudents();
+    }
+
+    function clearHighlights() {
+      document
+        .querySelectorAll(".student-card.highlight")
+        .forEach((el) => el.classList.remove("highlight"));
+    }
+
+    function highlightStudent(id) {
+      clearHighlights();
+      const card = document.querySelector(`.student-card[data-id="${id}"]`);
+      if (!card) return;
+      card.classList.add("highlight");
+      card.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function updateTeacherModeUI() {
+      document.querySelectorAll(".btn-point").forEach((btn) => {
+        btn.disabled = !teacherMode;
+      });
+      if (btnClearGroups) btnClearGroups.disabled = !teacherMode;
+      if (btnResetPoints) btnResetPoints.disabled = !teacherMode;
+      if (btnResetDaily) btnResetDaily.disabled = !teacherMode;
+      if (btnResetWeekly) btnResetWeekly.disabled = !teacherMode;
+      if (btnAttendanceMode) btnAttendanceMode.disabled = !teacherMode;
+      if (btnMakeGroups) btnMakeGroups.disabled = !teacherMode;
+    }
+
+    function updateAttendanceModeUI() {
+      if (!btnAttendanceMode) return;
+      if (attendanceMode) {
+        btnAttendanceMode.classList.add("btn--accent");
+      } else {
+        btnAttendanceMode.classList.remove("btn--accent");
+      }
+    }
+
+    function debounce(fn, delay) {
+      let timer = null;
+      return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    function resetRandomPool() {
+      randomPool = students.map((s) => s.id);
+    }
+
+    // FIREBASE
+    function initFirebase() {
+      if (!window.firebase) {
+        console.warn(
+          "Firebase bulunamadı. Puanlar bu oturumda geçici olarak tutulacak."
+        );
+        resetRandomPool();
+        randomPoolInitialized = true;
+        renderStudents();
+        return;
+      }
+
+      // 🔑 BURAYI KENDİ FIREBASE PROJE BİLGİLERİNİZLE DOLDURUN
+      const firebaseConfig = {
+        apiKey: "API_KEYINIZ",
+        authDomain: "PROJE_ADINIZ.firebaseapp.com",
+        databaseURL: "https://PROJE_ADINIZ-default-rtdb.firebaseio.com",
+        projectId: "PROJE_ADINIZ",
+        storageBucket: "PROJE_ADINIZ.appspot.com",
+        messagingSenderId: "MESAJ_ID",
+        appId: "APP_ID",
+      };
+
+      try {
+        const app = firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+      } catch (e) {
+        console.warn("Firebase başlatılamadı:", e);
+        resetRandomPool();
+        randomPoolInitialized = true;
+        renderStudents();
+        return;
+      }
+
+      const studentsRef = db.ref("classes/4h/students");
+      studentsRef.on("value", (snapshot) => {
+        if (snapshot.exists()) {
+          const obj = snapshot.val();
+          students = Object.values(obj)
+            .map(normalizeStudent)
+            .sort((a, b) => (a.no || 0) - (b.no || 0));
+        } else {
+          saveStudents();
+        }
+        if (!randomPoolInitialized) {
+          resetRandomPool();
+          randomPoolInitialized = true;
+        }
+        renderStudents();
+      });
+
+      const noteRef = db.ref("classes/4h/note");
+      noteRef.on("value", (snapshot) => {
+        if (snapshot.exists() && noteBox) {
+          noteBox.value = snapshot.val();
+        }
+      });
+    }
+
+    function saveStudents() {
+      if (!db) return;
+      const obj = {};
+      students.forEach((s) => {
+        obj[s.id] = normalizeStudent({ ...s });
+      });
+      db.ref("classes/4h/students").set(obj);
+    }
+
+    function saveNote() {
+      if (!db || !noteBox) return;
+      db.ref("classes/4h/note").set(noteBox.value || "");
+    }
+
+    // OLAY BAĞLANTILARI
+    function attachUIListeners() {
+      btnRandomStudent.addEventListener("click", () => {
+        if (!students.length) return;
+        if (!randomPool.length) {
+          resetRandomPool();
+          alert("Tüm öğrenciler bir kez seçildi, havuz başa döndü.");
+        }
+        const idx = Math.floor(Math.random() * randomPool.length);
+        const id = randomPool[idx];
+        randomPool.splice(idx, 1);
+        highlightStudent(id);
+      });
+
+      btnMakeGroups.addEventListener("click", () => {
+        if (!teacherMode) return;
+        if (!students.length) return;
+        const defaultSize = 3;
+        const input = prompt(
+          "Kaç kişilik gruplar olsun? (varsayılan: 3)",
+          defaultSize.toString()
+        );
+        if (input === null) return;
+        const size = parseInt(input, 10);
+        if (!size || size <= 0) {
+          alert("Geçerli bir sayı girin 🙂");
+          return;
+        }
+        const shuffled = [...students].sort(() => Math.random() - 0.5);
+        const groups = [];
+        for (let i = 0; i < shuffled.length; i += size) {
+          groups.push(shuffled.slice(i, i + size));
+        }
+
+        groupsList.innerHTML = "";
+        groups.forEach((group, index) => {
+          const item = document.createElement("div");
+          item.className = "group-item";
+          const label = document.createElement("div");
+          label.className = "group-label";
+          label.textContent = `Grup ${index + 1}`;
+          const names = document.createElement("div");
+          names.textContent = group.map((s) => s.name).join(", ");
+          item.appendChild(label);
+          item.appendChild(names);
+          groupsList.appendChild(item);
+        });
+      });
+
+      btnClearGroups.addEventListener("click", () => {
+        if (!teacherMode) return;
+        groupsList.innerHTML =
+          '<div style="font-size:12px; color:var(--text-soft);">"Gruplara Ayır" butonuna tıklayınca 4H sınıfınız otomatik gruplara ayrılır.</div>';
+      });
+
+      btnResetPoints.addEventListener("click", () => {
+        if (!teacherMode) return;
+        const ok = confirm("Tüm puanlar (genel) sıfırlansın mı?");
+        if (!ok) return;
+        students.forEach((s) => {
+          s.points = 0;
+        });
+        updateStats();
+        renderStudents();
+        saveStudents();
+      });
+
+      btnResetDaily.addEventListener("click", () => {
+        if (!teacherMode) return;
+        const ok = confirm("GÜNLÜK puan sayaçları ve yoklama sıfırlansın mı?");
+        if (!ok) return;
+        students.forEach((s) => {
+          s.dailyPlus = 0;
+          s.dailyMinus = 0;
+          s.absentToday = false;
+        });
+        updateStats();
+        renderStudents();
+        saveStudents();
+      });
+
+      btnResetWeekly.addEventListener("click", () => {
+        if (!teacherMode) return;
+        const ok = confirm("HAFTALIK puan sayaçları sıfırlansın mı?");
+        if (!ok) return;
+        students.forEach((s) => {
+          s.weeklyPlus = 0;
+          s.weeklyMinus = 0;
+        });
+        updateStats();
+        saveStudents();
+      });
+
+      if (btnSongToggle && classSong) {
+        btnSongToggle.addEventListener("click", async () => {
+          const src = classSong.getAttribute("src");
+          if (!src) {
+            alert("Henüz sınıf şarkısının dosya yolunu eklemediniz.");
+            return;
+          }
+          try {
+            if (!songPlaying) {
+              await classSong.play();
+              songPlaying = true;
+              btnSongToggle.innerHTML =
+                '<span class="btn-icon">⏸</span> Sınıf Şarkısını Durdur';
+            } else {
+              classSong.pause();
+              songPlaying = false;
+              btnSongToggle.innerHTML =
+                '<span class="btn-icon">🎵</span> Sınıf Şarkısını Çal';
+            }
+          } catch (e) {
+            console.warn("Şarkı çalarken hata:", e);
+          }
+        });
+      }
+
+      if (noteBox) {
+        noteBox.addEventListener("input", debounce(saveNote, 500));
+      }
+
+      if (btnAttendanceMode) {
+        btnAttendanceMode.addEventListener("click", () => {
+          if (!teacherMode) return;
+          attendanceMode = !attendanceMode;
+          updateAttendanceModeUI();
+        });
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Z" && e.shiftKey) {
+          teacherMode = !teacherMode;
+          updateTeacherModeUI();
+        }
+      });
+    }
+
+    // UYGULAMA BAŞLAT
+    (function init() {
+      renderStudents();
+      resetRandomPool();
+      randomPoolInitialized = true;
+      attachUIListeners();
+      initFirebase();
+      updateTeacherModeUI(); // başta öğretmen butonları kilitli
+    })();
+  </script>
+</body>
+</html>
